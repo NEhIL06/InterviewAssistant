@@ -25,6 +25,7 @@ export interface ICandidate extends Document {
   updatedAt: Date;
 }
 
+
 const AnswerSchema = new Schema(
   {
     qid: String,

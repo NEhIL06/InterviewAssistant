@@ -9,20 +9,20 @@ import { z } from "zod";
 // Auth schemas
 export const SignUpSchema = z.object({
   name: z.string().min(2),
-  email: z.string().email(),
+  email: z.email().min(1),
   phone: z.string().min(7).max(20).optional(),
   password: z.string().min(6),
 });
 
 export const SignInSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(6),
 });
 
 // Candidate upload
 export const CandidateUploadSchema = z.object({
   name: z.string().min(1),
-  email: z.string().email(),
+  email: z.email().min(1),
   phone: z.string().optional(),
   appliedPosition: z.string().optional(),
   resumeText: z.string().optional(), // optional textual resume
