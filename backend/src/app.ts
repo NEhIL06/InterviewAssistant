@@ -16,8 +16,8 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(json({ limit: "2mb" }));
 
-app.use("/api/auth", authRouter);
-app.use("/api/candidate", candidateRouter);
+app.use("/api/auth", authRouter);//chal rha hai
+app.use("/api/candidate", candidateRouter);//chal rha hai
 app.use("/api/interviewer", interviewerRouter);
 app.use("/api/interview", interviewRouter);
 

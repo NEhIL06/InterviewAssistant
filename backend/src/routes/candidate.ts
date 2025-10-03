@@ -28,7 +28,7 @@ candidateRouter.post("/upload", validate(CandidateUploadSchema), async (req, res
     });
     await newUser.save();
 
-    res.status(201).json({ message: "Data uploaded successfully", candidateId: newUser._id, parsed });
+    res.status(201).json({ message: "Data uploaded successfully", candidateId: newUser._id, parsed, user:newUser });
   } catch (err) {
     next(err);
   }

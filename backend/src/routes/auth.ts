@@ -30,7 +30,8 @@ authRouter.post("/signin", validate(SignInSchema), async (req, res, next) => {
     const ok = await bcrypt.compare(password, user.password);
     if (!ok) return res.status(401).json({ error: "Invalid password" });
     const token = jwt.sign({ id: user._id.toString() }, JWT_SECRET, { expiresIn: "7d" });
-    res.json({ token });
+    console.log(token);
+    res.status(200).json({ token });
   } catch (err) {
     next(err);
   }

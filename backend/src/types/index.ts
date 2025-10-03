@@ -19,6 +19,11 @@ export const SignInSchema = z.object({
   password: z.string().min(6),
 });
 
+
+export const ResumeSchema = z.object({
+  resumeText: z.string().min(10, "Resume text is required"),
+});
+
 // Candidate upload
 export const CandidateUploadSchema = z.object({
   name: z.string().min(1),

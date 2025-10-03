@@ -9,9 +9,11 @@ interviewerRouter.use(authMiddleware);
 
 interviewerRouter.get("/candidates", async (req, res, next) => {
   try {
-    const list = await Candidate.find({}).select("name email status totalScore updatedAt").sort({ updatedAt: -1 });
-    res.json(list);
+    const list= await Candidate.find({}).select("name email status totalScore updatedAt").sort({ updatedAt: -1 });
+    if(!list) return res.status(404).json({ error: "No candidates found" });
+    res.status(200).json({candidates: list});
   } catch (err) {
+    res.status(500).json({ error: "Server error" });
     next(err);
   }
 });
