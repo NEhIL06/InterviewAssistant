@@ -136,7 +136,7 @@ describe("Interview Flow API", () => {
     expect(res.data.questions).toBeDefined();
     expect(res.data.questions.length).toBeGreaterThan(0);
     interviewId = res.data.interviewId;
-  });
+  });// ye chal rha hai
 
   test("POST /interview/answer → score answer", async () => {
     const res = await axios.post(`${BASE_URL}/interview/answer`, {

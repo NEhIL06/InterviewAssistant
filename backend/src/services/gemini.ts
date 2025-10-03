@@ -78,6 +78,12 @@ export async function generateFinalSummaryMock(answers: { question: string; answ
 /* REAL GEMINI CALLS                                                  */
 /* ------------------------------------------------------------------ */
 
+function removeCodeBlockMarkers(text:any) {
+  // Use regular expressions for robust removal
+  text = text.replace(/```(?:json)?\n?/g, ""); // Remove opening markers (global replace)
+  text = text.replace(/```/g, ""); // Remove closing markers (global replace)
+  return text.trim(); // Remove leading/trailing whitespace
+}
 export async function generateQuestions(candidateContext: string | null, count = 6) {
   if (!GEMINI_KEY) return generateQuestionsMock(candidateContext, count);
 
@@ -103,12 +109,15 @@ ${candidateContext ?? ""}
     config: { temperature: 0.3 },
   });
 
-  const text = extractText(resp);
+  let text = extractText(resp); // ✅ get response text
+  text = removeCodeBlockMarkers(text); // ✅ clean code block markers
+
   const parsed = safeParseJSON<{ questions: { qid: string; question: string; timeLimit: number }[] }>(text);
   if (parsed?.questions) return parsed.questions;
 
   throw new Error("Failed to parse questions JSON from Gemini: " + text);
 }
+
 
 export async function scoreAnswer(question: string, answerText: string) {
   if (!GEMINI_KEY) return scoreAnswerMock(question, answerText);
@@ -137,7 +146,9 @@ Answer: ${answerText}
     config: { temperature: 0.2 },
   });
 
-  const text = extractText(resp);
+  let text = extractText(resp); // ✅ use extractText
+  text = removeCodeBlockMarkers(text);
+
   const parsed = safeParseJSON<{ score: number; summary: string; breakdown: { criterion: string; awarded: number; max: number }[] }>(text);
   if (parsed?.score !== undefined) return parsed;
 
@@ -149,6 +160,7 @@ export async function generateFinalSummary(answers: { question: string; answerTe
 
   const ai = getClient();
   const promptLines = answers.map(a => `Q: ${a.question}\nA: ${a.answerText}\nScore: ${a.score}`).join("\n\n");
+
   const prompt = `
 You are an expert interviewer. Summarize the candidate’s performance.  
 Return JSON:
@@ -168,7 +180,9 @@ ${promptLines}
     config: { temperature: 0.2 },
   });
 
-  const text = extractText(resp);
+  let text = extractText(resp); // ✅
+  text = removeCodeBlockMarkers(text);
+
   const parsed = safeParseJSON<{ totalScore: number; summary: string }>(text);
   if (parsed?.totalScore !== undefined) return parsed;
 
