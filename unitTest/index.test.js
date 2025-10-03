@@ -110,6 +110,7 @@ describe("Interviewer API", () => {
 /**
  * 
  * TODO here : ye test ko chalana hai
+ * candiate ka data defined nhi hai usko check karo
  */
   test("GET /interviewer/candidate/:id → get candidate details", async () => {  
     const res = await axios.get(`${BASE_URL}/interviewer/candidate/${candidateId}`, {
