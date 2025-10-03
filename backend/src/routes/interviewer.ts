@@ -22,7 +22,7 @@ interviewerRouter.get("/candidate/:id", async (req, res, next) => {
   try {
     const c = await Candidate.findById(req.params.id);
     if (!c) return res.status(404).json({ error: "Candidate not found" });
-    res.json(c);
+    res.status(200).json({ candidate: c });
   } catch (err) {
     next(err);
   }
