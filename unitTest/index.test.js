@@ -53,7 +53,6 @@ describe("Auth API", () => {
 
   })
   test("POST /auth/signup → register interviewer", async () => {
-    console.log("Registering interviewer...");
     const res = await axios.post(`${BASE_URL}/auth/signup`, {
       name: "Test Interviewer",
       email: email,
@@ -70,7 +69,6 @@ describe("Auth API", () => {
       password: "secret123",
     });
 
-    console.log(res.data.token);
     expect(res.status).toBe(200);
     expect(res.data.token).toBeDefined();
     authToken = res.data.token;
@@ -89,8 +87,6 @@ describe("Candidate API", () => {
       resumeText: "John Doe\nEmail: john.doe@gmail.com\nPhone: +91-9876543210\nApplied Position: Backend Developer"
       
     });
-
-    console.log(res.data);
     expect(res.status).toBe(201);
     expect(res.data.user).toBeDefined();
     candidateId = res.data.user._id;
@@ -103,7 +99,6 @@ describe("Interviewer API", () => {
     const res = await axios.get(`${BASE_URL}/interviewer/candidates`, {
       headers: { Authorization: `Bearer ${authToken}` },
     });
-    console.log(res.status, res.data);
     expect(res.status).toBe(200);
     expect(Array.isArray(res.data.candidates)).toBe(true);
   });
@@ -131,21 +126,21 @@ describe("Interview Flow API", () => {
       candidateId,
       context: "React + Node.js developer",
     });
-
     expect(res.status).toBe(200);
     expect(res.data.questions).toBeDefined();
     expect(res.data.questions.length).toBeGreaterThan(0);
-    interviewId = res.data.interviewId;
+    interviewId = res.data.sessionId;
   });// ye chal rha hai
 
   test("POST /interview/answer → score answer", async () => {
+    let sessionId = interviewId;
     const res = await axios.post(`${BASE_URL}/interview/answer`, {
-      interviewId,
+      sessionId: `${sessionId}`,
       qid: "q1",
-      question: "What is a closure in JS?",
-      answerText: "A closure is a function with preserved scope in JavaScript.",
+      answer: "A closure is a function with preserved scope in JavaScript.",
     });
-
+    console.log("answer");
+    console.log(res);
     expect(res.status).toBe(200);
     expect(res.data.score).toBeDefined();
     expect(res.data.summary).toBeDefined();
@@ -153,9 +148,10 @@ describe("Interview Flow API", () => {
 
   test("POST /interview/finish → final summary", async () => {
     const res = await axios.post(`${BASE_URL}/interview/finish`, {
-      interviewId,
+      sessionId: interviewId,
     });
-
+    console.log("finish");
+    console.log(res);
     expect(res.status).toBe(200);
     expect(res.data.totalScore).toBeDefined();
     expect(res.data.summary).toBeDefined();

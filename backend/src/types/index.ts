@@ -45,5 +45,5 @@ export const InterviewAnswerSchema = z.object({
 });
 
 export const InterviewFinishSchema = z.object({
-  sessionId: z.string().min(1),
+  sessionId: z.string(),
 });
