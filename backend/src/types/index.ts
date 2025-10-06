@@ -30,7 +30,7 @@ export const CandidateUploadSchema = z.object({
   email: z.email().min(1),
   phone: z.string().optional(),
   appliedPosition: z.string().optional(),
-  resumeText: z.string().optional(), // optional textual resume
+  resumeText: z.string(), // optional textual resume
 });
 
 // Interview actions
