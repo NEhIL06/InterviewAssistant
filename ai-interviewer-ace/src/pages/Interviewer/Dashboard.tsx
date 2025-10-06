@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/table';
 
 interface Candidate {
-  id: string;
+  _id: string;
   name: string;
   status: string;
   score: number;
@@ -43,7 +43,7 @@ const Dashboard = () => {
         : Array.isArray(data?.candidates)
         ? data.candidates
         : [];
-  
+      console.log('Fetched candidates:', candidateList);
       setCandidates(candidateList);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to fetch candidates');
@@ -127,7 +127,7 @@ const Dashboard = () => {
                   </TableHeader>
                   <TableBody>
                     {candidates.map((candidate) => (
-                      <TableRow key={candidate.id }>
+                      <TableRow key={candidate._id }>
                         <TableCell className="font-medium">{candidate.name}</TableCell>
                         <TableCell>
                           <Badge className={getStatusColor(candidate.status)}>
@@ -143,7 +143,7 @@ const Dashboard = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => navigate(`/interviewer/candidate/${candidate.id}`)}
+                            onClick={() => navigate(`/interviewer/candidate/${candidate._id}`)}
                             className="gap-2"
                           >
                             <Eye className="h-4 w-4" />

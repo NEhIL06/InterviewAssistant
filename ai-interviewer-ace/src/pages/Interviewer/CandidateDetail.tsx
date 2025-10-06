@@ -16,7 +16,7 @@ interface Answer {
 }
 
 interface CandidateDetail {
-  id: string;
+  _id: string;
   name: string;
   email?: string;
   answers: Answer[];
@@ -38,7 +38,10 @@ const CandidateDetail = () => {
   const fetchCandidateDetail = async () => {
     try {
       const response = await api.get(`/interviewer/candidate/${id}`);
-      setCandidate(response.data);
+      setCandidate({
+        ...response.data,
+        answers: response.data.answers || [],
+      });
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to fetch candidate details');
       navigate('/interviewer/dashboard');
@@ -125,15 +128,16 @@ const CandidateDetail = () => {
             </Card>
           </motion.div>
 
-          {/* Answers */}
-          {candidate.answers.map((answer, index) => (
-            <motion.div
-              key={answer.qid}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 * (index + 2) }}
-            >
-              <Card className="shadow-card">
+          {candidate.answers?.length ? (
+  candidate.answers.map((answer, index) => (
+    <motion.div
+      key={answer.qid || index}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 * (index + 2) }}
+    >
+      {/* your card content */}
+      <Card className="shadow-card">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <CardTitle className="text-lg">
@@ -166,8 +170,14 @@ const CandidateDetail = () => {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
-          ))}
+    </motion.div>
+  ))
+) : (
+  <p className="text-muted-foreground text-center">No answers available for this candidate.</p>
+)}
+
+         
+          
         </div>
       </div>
     </div>
