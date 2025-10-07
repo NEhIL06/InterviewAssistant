@@ -12,7 +12,9 @@ import { interviewRouter } from "./routes/interview";
 
 export const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin:'https://interviewassistantfe.onrender.com'
+}));
 app.use(morgan("dev"));
 app.use(json({ limit: "2mb" }));
 
