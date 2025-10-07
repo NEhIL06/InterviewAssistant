@@ -6,3 +6,8 @@ backend/.env
 
 unitTest/node_modules
 unitTest/package-lock.json
+
+
+ai-interviewer-ace/node_modules
+ai-interviewer-ace/package-lock.json
+ai-interviewer-ace/.env
